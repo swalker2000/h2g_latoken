@@ -119,13 +119,15 @@ class Telebot {
     private suspend fun sendResults(commonMessage: CommonMessage<TextContent>, aiAnswer : String, userResponseList: List<String>)
     {
         val chat  = commonMessage.chat
-        val personalDataMessage = PersonalDataMessage(chat.id.chatId.toString())
+        val user = commonMessage.from
+        val userId : Long = if(user!=null) user.id.chatId else chat.id.chatId
+        val personalDataMessage = PersonalDataMessage(userId.toString())
         fun addIfNotEmpty(paramName : String, paramValue : String?)
         {
             if(!paramValue.isNullOrEmpty())
                 personalDataMessage.data[paramName]=paramValue
         }
-        val user = commonMessage.from
+
         if(user!=null) {
             addIfNotEmpty("firstName", user.firstName)
             addIfNotEmpty("lastName", user.lastName)
